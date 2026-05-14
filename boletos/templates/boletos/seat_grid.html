@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Bus: {{ bus.nombre }}</h1>
+    <a href="{% url 'boletos:bus_list' %}" class="btn btn-secondary">Volver</a>
+</div>
+<p class="text-muted">Placa: {{ bus.placa }} | Capacidad: {{ bus.capacidad }} asientos</p>
+<hr>
+
+<div class="row row-cols-4 g-3" style="max-width: 300px; margin: auto;">
+    {% for asiento in asientos %}
+    <div class="col">
+        {% if not asiento.ocupado %}
+        <a href="{% url 'boletos:reserve' asiento.pk %}" class="btn btn-success d-block asiento-btn" style="height: 50px; display: flex; align-items: center; justify-content: center;">
+            {{ asiento.numero }}
+        </a>
+        {% else %}
+        <div class="btn btn-danger d-block disabled" style="height: 50px; display: flex; align-items: center; justify-content: center;">
+            {{ asiento.numero }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mt-4 text-center">
+    <span class="badge bg-success">Disponible</span>
+    <span class="badge bg-danger">Ocupado</span>
+</div>
+{% endblock %}

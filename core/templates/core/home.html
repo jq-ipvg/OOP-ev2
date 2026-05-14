@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Reserva tu Boleto</h1>
+    <p class="lead">Selecciona un bus, elige tu asiento y viaja cómodamente.</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'boletos:bus_list' %}" class="btn btn-primary btn-lg">Ver Buses Disponibles</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Iniciar Sesión</a>
+        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Registrarse</a>
+    {% endif %}
+</div>
+{% endblock %}

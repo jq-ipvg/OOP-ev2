@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<h1>Buses Disponibles</h1>
+<div class="row">
+    {% for bus in buses %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ bus.nombre }}</h5>
+                <p class="card-text">Placa: {{ bus.placa }}<br>Capacidad: {{ bus.capacidad }} asientos</p>
+                <a href="{% url 'boletos:seat_grid' bus.pk %}" class="btn btn-primary">Ver Asientos</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No hay buses disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

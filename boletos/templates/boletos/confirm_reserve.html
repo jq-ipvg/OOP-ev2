@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col col-md-6 mx-auto text-center">
+        <h1>Confirmar Reserva</h1>
+        <p class="lead">¿Estás seguro que deseas reservar el <strong>Asiento {{ asiento.numero }}</strong> del bus <strong>{{ asiento.bus.nombre }}</strong>?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Sí, reservar</button>
+            <a href="{% url 'boletos:seat_grid' asiento.bus.pk %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
