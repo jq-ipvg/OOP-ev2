@@ -1,0 +1,55 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card">
+        <div class="page-header">
+            <h1>Mis Reservas</h1>
+            <p class="text-secondary">Tus reservas de asientos activas.</p>
+        </div>
+
+        {% if reservas %}
+        <div class="table-responsive">
+            <table class="table-reservas w-100">
+                <thead>
+                    <tr>
+                        <th>Bus</th>
+                        <th>Asiento</th>
+                        <th>Fecha de Reserva</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'boletos:seat_grid' reserva.bus.pk %}" class="fw-bold text-decoration-none" style="color: var(--color-text);">
+                                {{ reserva.bus.nombre }}
+                            </a>
+                            <br><span class="text-secondary">{{ reserva.bus.placa }}</span>
+                        </td>
+                        <td class="fw-bold">{{ reserva.numero }}</td>
+                        <td>{{ reserva.fecha_reserva|date:'d/m/Y H:i' }}</td>
+                        <td><span class="badge-estado badge-activa">Activa</span></td>
+                        <td class="text-end">
+                            <a href="{% url 'boletos:cancel' reserva.pk %}" class="btn-sm-accent">
+                                <i class="bi bi-x-lg me-1"></i>Cancelar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-ticket-perforated empty-icon"></i>
+            <p>No tienes reservas activas.</p>
+            <a href="{% url 'boletos:bus_list' %}" class="btn-accent mt-2 d-inline-block">Ver Buses Disponibles</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

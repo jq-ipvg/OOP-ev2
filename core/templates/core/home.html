@@ -1,14 +1,95 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1>Reserva tu Boleto</h1>
-    <p class="lead">Selecciona un bus, elige tu asiento y viaja cómodamente.</p>
-    {% if user.is_authenticated %}
-        <a href="{% url 'boletos:bus_list' %}" class="btn btn-primary btn-lg">Ver Buses Disponibles</a>
-    {% else %}
-        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Iniciar Sesión</a>
-        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Registrarse</a>
-    {% endif %}
-</div>
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">Viaja cómodo,<br>reserva tu asiento</h1>
+                <p class="hero-subtitle mt-3">
+                    Selecciona tu bus, elige tu asiento y viaja sin preocupaciones.
+                    Reserva en línea de forma rápida y segura.
+                </p>
+                <div class="hero-cta mt-4 d-flex gap-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'boletos:bus_list' %}" class="btn-accent">Ver Buses Disponibles</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn-accent">Iniciar Sesión</a>
+                        <a href="{% url 'register' %}" class="btn-outline">Crear Cuenta</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <img src="{% static 'core/img/hero-bus.svg' %}" alt="Bus ilustración" class="img-fluid" style="max-width: 380px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-steps">
+    <div class="container text-center">
+        <h2>Cómo funciona</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h5>Selecciona tu bus</h5>
+                    <p>Elige entre los buses disponibles y revisa sus asientos.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h5>Elige tu asiento</h5>
+                    <p>Visualiza el mapa de asientos y escoge el que más te guste.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h5>Reserva y viaja</h5>
+                    <p>Confirma tu reserva en un clic y disfruta del viaje.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-features">
+    <div class="container text-center">
+        <h2>Por qué elegirnos</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="bi bi-lightning-charge"></i></span>
+                    <h5>Reserva rápida</h5>
+                    <p>En solo unos clics asegura tu asiento. Sin formularios tediosos.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="bi bi-arrow-counterclockwise"></i></span>
+                    <h5>Cancelación fácil</h5>
+                    <p>¿Cambiaste de opinión? Cancela tu reserva sin complicaciones.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <span class="feature-icon"><i class="bi bi-bus-front"></i></span>
+                    <h5>Flota moderna</h5>
+                    <p>Buses equipados para tu comodidad y seguridad en cada viaje.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-trust">
+    <div class="container">
+        <span class="trust-icon"><i class="bi bi-geo-alt"></i></span>
+        <h3>Operamos en todo Chile</h3>
+        <p>Conectamos los principales destinos del país con la mejor experiencia de reserva. Donde vayas, estamos contigo.</p>
+    </div>
+</section>
 {% endblock %}

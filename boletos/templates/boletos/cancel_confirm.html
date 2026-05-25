@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="cancel-card">
+        <div class="card">
+            <div class="card-body">
+                <i class="bi bi-exclamation-triangle" style="font-size: 2.5rem; color: var(--color-danger); margin-bottom: 0.5rem; display: block;"></i>
+                <h1 class="h4 mb-2">Cancelar Reserva</h1>
+                <p class="text-secondary mb-0">¿Estás seguro de cancelar la reserva del asiento</p>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--color-danger); margin: 0.5rem 0;">{{ asiento.numero }}</div>
+                <p class="bus-name">
+                    <i class="bi bi-bus-front me-1"></i> {{ asiento.bus.nombre }} — {{ asiento.bus.placa }}
+                </p>
+                <p class="text-secondary small">Esta acción no se puede deshacer.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex gap-3 justify-content-center">
+                        <button type="submit" class="btn-danger">
+                            <i class="bi bi-x-lg me-1"></i>Sí, cancelar reserva
+                        </button>
+                        <a href="{% url 'boletos:mis_reservas' %}" class="btn-secondary">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

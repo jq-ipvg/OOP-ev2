@@ -1,20 +1,56 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Buses Disponibles</h1>
-<div class="row">
-    {% for bus in buses %}
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ bus.nombre }}</h5>
-                <p class="card-text">Placa: {{ bus.placa }}<br>Capacidad: {{ bus.capacidad }} asientos</p>
-                <a href="{% url 'boletos:seat_grid' bus.pk %}" class="btn btn-primary">Ver Asientos</a>
+<section class="page-section">
+    <div class="page-card">
+        <div class="page-header">
+            <h1>Buses Disponibles</h1>
+            <p class="text-secondary">Selecciona un bus para ver sus asientos y reservar.</p>
+        </div>
+
+        <div class="row">
+            {% for bus in buses %}
+            <div class="col-md-4 mb-4">
+                <div class="card-bus">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div>
+                                <img src="{% static 'core/img/bus-icon.svg' %}" alt="Bus" class="card-icon">
+                                <h5 class="card-title">{{ bus.nombre }}</h5>
+                            </div>
+                            <span class="badge-available">
+                                {{ bus.asientos_disponibles }}/{{ bus.capacidad }} libres
+                            </span>
+                        </div>
+                        <p class="card-text mb-1">
+                            <i class="bi bi-upc-scan me-1"></i> {{ bus.placa }}
+                        </p>
+                        <p class="card-text mb-0">
+                            <i class="bi bi-people me-1"></i> {{ bus.capacidad }} asientos
+                            {% if bus.asientos_disponibles > 0 %}
+                            <span class="ms-2" style="color: var(--color-success); font-size: 0.8125rem;">
+                                <i class="bi bi-check-circle"></i> {{ bus.asientos_disponibles }} disponibles
+                            </span>
+                            {% else %}
+                            <span class="ms-2" style="color: var(--color-danger); font-size: 0.8125rem;">
+                                <i class="bi bi-x-circle"></i> Completos
+                            </span>
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'boletos:seat_grid' bus.pk %}" class="btn-accent mt-3 d-block text-center">
+                            Ver Asientos
+                        </a>
+                    </div>
+                </div>
             </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="bi bi-bus-front empty-icon"></i>
+                <p>No hay buses disponibles en este momento.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    {% empty %}
-    <p>No hay buses disponibles.</p>
-    {% endfor %}
-</div>
+</section>
 {% endblock %}

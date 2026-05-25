@@ -14,6 +14,12 @@ class Bus(models.Model):
             for i in range(1, self.capacidad + 1):
                 Asiento.objects.create(bus=self, numero=i)
 
+    def asientos_disponibles(self):
+        return self.asientos.filter(ocupado=False).count()
+
+    def asientos_ocupados(self):
+        return self.asientos.filter(ocupado=True).count()
+
     def __str__(self):
         return f"{self.nombre} [{self.placa}]"
 
