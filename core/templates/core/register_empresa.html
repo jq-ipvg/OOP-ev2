@@ -7,16 +7,15 @@
     <div class="card">
         <div class="card-body text-center">
             <img src="{% static 'core/img/bus-icon.svg' %}" alt="Bus" class="auth-icon">
-            <h1>Iniciar Sesión</h1>
-            <form action="{% url 'login' %}" method="POST">
+            <h1>Registro Empresarial</h1>
+            <p class="text-secondary mb-3" style="font-size: 0.875rem;">Crea una cuenta para gestionar tus buses y reservas.</p>
+            <form method="POST">
                 {% csrf_token %}
                 {{ form | crispy }}
-                <button class="btn-accent mt-2" type="submit">Entrar</button>
+                <button class="btn-accent mt-2" type="submit">Crear Cuenta Empresarial</button>
             </form>
             <p class="auth-footer">
-                ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>
-                <br>
-                ¿Eres empresa? <a href="{% url 'register_empresa' %}">Registra tu empresa aquí</a>
+                ¿Eres cliente? <a href="{% url 'register' %}">Regístrate aquí</a>
             </p>
         </div>
     </div>

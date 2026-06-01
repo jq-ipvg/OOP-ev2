@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section d-flex align-items-center" style="min-height: calc(100vh - 56px);">
+    <div class="page-card text-center" style="max-width: 480px;">
+        <i class="bi bi-signpost-2" style="font-size: 3rem; color: var(--color-text-secondary); margin-bottom: 0.75rem; display: block;"></i>
+        <h1 style="font-size: 4rem; font-weight: 800; color: var(--color-accent); line-height: 1;">404</h1>
+        <p class="text-secondary" style="font-size: 1.125rem; margin: 0.5rem 0 1.5rem;">Esta ruta no existe o el bus fue eliminado.</p>
+        <a href="{% url 'home' %}" class="btn-accent">Volver al inicio</a>
+    </div>
+</section>
+{% endblock %}

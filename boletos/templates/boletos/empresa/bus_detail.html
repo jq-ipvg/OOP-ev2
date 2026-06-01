@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card">
+        <div class="mb-3">
+            <a href="{% url 'boletos:empresa_bus_list' %}" class="btn-back">
+                <i class="bi bi-arrow-left"></i> Volver a mis buses
+            </a>
+        </div>
+        <div class="page-header">
+            <h1>{{ bus.nombre }}</h1>
+            <p class="text-secondary">
+                <i class="bi bi-upc-scan me-1"></i> {{ bus.placa }} &middot;
+                <i class="bi bi-people me-1"></i> {{ bus.capacidad }} asientos &middot;
+                <i class="bi bi-building me-1"></i> {{ bus.get_pisos_display }} &middot;
+                <span style="color: var(--color-success);">{{ asientos_disponibles }} disponibles</span>
+            </p>
+            <div class="d-flex gap-2 mt-2">
+                <a href="{% url 'boletos:empresa_bus_update' bus.pk %}" class="btn-accent">Editar</a>
+                <a href="{% url 'boletos:empresa_bus_delete' bus.pk %}" class="btn-secondary">Eliminar</a>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-3">Reservas activas</h5>
+        {% if reservas %}
+        <div class="table-responsive">
+            <table class="table-reservas w-100">
+                <thead>
+                    <tr>
+                        <th>Asiento</th>
+                        <th>Pasajero</th>
+                        <th>Fecha de reserva</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asiento in reservas %}
+                    <tr>
+                        <td class="fw-bold">{{ asiento.numero }}</td>
+                        <td>{{ asiento.usuario.get_full_name|default:asiento.usuario.username }}</td>
+                        <td>{{ asiento.fecha_reserva|date:'d/m/Y H:i' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-ticket-perforated empty-icon"></i>
+            <p>No hay reservas en este bus.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

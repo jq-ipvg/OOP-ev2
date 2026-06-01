@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="cancel-card">
+        <div class="card">
+            <div class="card-body">
+                <i class="bi bi-exclamation-triangle" style="font-size: 2.5rem; color: var(--color-danger); margin-bottom: 0.5rem; display: block;"></i>
+                <h1 class="h4 mb-2">Eliminar Bus</h1>
+                <p class="text-secondary mb-0">¿Estás seguro de eliminar el bus</p>
+                <div style="font-size: 1.5rem; font-weight: 800; margin: 0.5rem 0;">{{ bus.nombre }}</div>
+                <p class="text-secondary">{{ bus.placa }} — {{ bus.capacidad }} asientos</p>
+                <p class="text-secondary small">Se eliminarán también todos sus asientos y reservas asociadas. Esta acción no se puede deshacer.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex gap-3 justify-content-center">
+                        <button type="submit" class="btn-danger">
+                            <i class="bi bi-trash me-1"></i>Sí, eliminar
+                        </button>
+                        <a href="{% url 'boletos:empresa_bus_list' %}" class="btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

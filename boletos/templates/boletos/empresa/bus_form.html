@@ -1,0 +1,69 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card" style="max-width: 560px;">
+        <div class="mb-3">
+            <a href="{% url 'boletos:empresa_bus_list' %}" class="btn-back">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="page-header text-center">
+            <h1>{% if object %}Editar Bus{% else %}Crear Bus{% endif %}</h1>
+            <p class="text-secondary">
+                {% if object %}Actualiza los datos del bus.{% else %}Completa los datos del bus. Los asientos se generarán automáticamente según la capacidad de cada piso.{% endif %}
+            </p>
+        </div>
+
+        <form method="POST" class="mx-auto" style="max-width: 380px;">
+            {% csrf_token %}
+            {% if object %}
+                {{ form | crispy }}
+            {% else %}
+                {{ form.nombre | as_crispy_field }}
+                {{ form.placa | as_crispy_field }}
+                {{ form.pisos | as_crispy_field }}
+                <div id="piso1-group">
+                    {{ form.asientos_piso_1 | as_crispy_field }}
+                </div>
+                <div id="piso2-group" style="display: none;">
+                    {{ form.asientos_piso_2 | as_crispy_field }}
+                </div>
+            {% endif %}
+            <div class="text-center mt-3">
+                <button type="submit" class="btn-accent">
+                    {% if object %}Guardar cambios{% else %}Crear Bus{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% if not object %}
+<script>
+    function togglePisos() {
+        var val = parseInt(document.querySelector('select[name="pisos"]')?.value || 1);
+        var g1 = document.getElementById('piso1-group');
+        var g2 = document.getElementById('piso2-group');
+        var l1 = g1?.querySelector('label');
+        var i1 = g1?.querySelector('input');
+        if (val === 1) {
+            g1.style.display = 'block';
+            g2.style.display = 'none';
+            if (l1) l1.textContent = 'Asientos totales';
+            if (i1) i1.placeholder = 'Máximo 45';
+        } else {
+            g1.style.display = 'block';
+            g2.style.display = 'block';
+            if (l1) l1.textContent = 'Asientos primer piso';
+            if (i1) i1.placeholder = 'Máximo 45';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        togglePisos();
+        document.querySelector('select[name="pisos"]')?.addEventListener('change', togglePisos);
+    });
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card" style="max-width: 560px;">
+        <div class="page-header text-center">
+            <i class="bi bi-person-circle" style="font-size: 3rem; color: var(--color-text-secondary); margin-bottom: 0.5rem; display: block;"></i>
+            <h1>Mi Perfil</h1>
+            <p class="text-secondary">{{ user.profile.get_tipo_display }}</p>
+        </div>
+
+        <form method="POST" class="mx-auto" style="max-width: 380px;">
+            {% csrf_token %}
+            {{ form.username | as_crispy_field }}
+            {{ form.email | as_crispy_field }}
+            {{ form.first_name | as_crispy_field }}
+            {{ form.last_name | as_crispy_field }}
+            {{ form.empresa_nombre | as_crispy_field }}
+            <div class="text-center mt-3">
+                <button type="submit" class="btn-accent">Guardar Cambios</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'password_change' %}" class="btn-secondary">Cambiar Contraseña</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

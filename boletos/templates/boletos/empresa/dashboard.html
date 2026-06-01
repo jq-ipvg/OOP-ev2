@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card">
+        <div class="page-header">
+            <h1>Panel de Empresa</h1>
+            <p class="text-secondary">Bienvenido, {{ user.profile.empresa_nombre|default:user.username }}.</p>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="card-bus">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-bus-front" style="font-size: 2rem; color: var(--color-accent);"></i>
+                            <div>
+                                <h5 class="card-title mb-0">{{ total_buses }}</h5>
+                                <p class="card-text mb-0">Buses registrados</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-bus">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-ticket-perforated" style="font-size: 2rem; color: var(--color-accent);"></i>
+                            <div>
+                                <h5 class="card-title mb-0">{{ total_reservas }}</h5>
+                                <p class="card-text mb-0">Reservas activas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-4">
+            <a href="{% url 'boletos:empresa_bus_list' %}" class="btn-accent">Mis Buses</a>
+            <a href="{% url 'boletos:empresa_bus_create' %}" class="btn-secondary">Crear Bus</a>
+        </div>
+
+        {% if buses %}
+        <h5 class="fw-bold mb-3">Tus buses</h5>
+        <div class="row">
+            {% for bus in buses %}
+            <div class="col-md-6 mb-3">
+                <div class="card-bus">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bus.nombre }}</h5>
+                        <p class="card-text mb-1"><i class="bi bi-upc-scan me-1"></i> {{ bus.placa }}</p>
+                        <p class="card-text mb-0">
+                            <i class="bi bi-people me-1"></i> {{ bus.asientos_disponibles }}/{{ bus.capacidad }} libres
+                        </p>
+                        <a href="{% url 'boletos:empresa_bus_detail' bus.pk %}" class="btn-accent mt-2 d-inline-block">Ver detalle</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

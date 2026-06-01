@@ -28,6 +28,9 @@
                         </p>
                         <p class="card-text mb-0">
                             <i class="bi bi-people me-1"></i> {{ bus.capacidad }} asientos
+                            <span class="ms-2" style="color: var(--color-text-secondary); font-size: 0.8125rem;">
+                                <i class="bi bi-building me-1"></i> {{ bus.get_pisos_display }}
+                            </span>
                             {% if bus.asientos_disponibles > 0 %}
                             <span class="ms-2" style="color: var(--color-success); font-size: 0.8125rem;">
                                 <i class="bi bi-check-circle"></i> {{ bus.asientos_disponibles }} disponibles
