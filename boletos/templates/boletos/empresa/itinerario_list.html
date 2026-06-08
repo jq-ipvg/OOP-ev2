@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card">
+        <div class="page-header d-flex align-items-start justify-content-between">
+            <div>
+                <h1>Itinerarios</h1>
+                <p class="text-secondary">Gestiona los horarios de salida de tus buses.</p>
+            </div>
+            <a href="{% url 'boletos:empresa_itinerario_create' %}" class="btn-accent">+ Crear Itinerario</a>
+        </div>
+
+        {% if itinerarios %}
+        <div class="table-responsive">
+            <table class="table-reservas w-100">
+                <thead>
+                    <tr>
+                        <th>Bus</th>
+                        <th>Ruta</th>
+                        <th>Sale</th>
+                        <th>Llega</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for it in itinerarios %}
+                    <tr>
+                        <td><strong>{{ it.bus.nombre }}</strong></td>
+                        <td>{{ it.ruta.origen }} → {{ it.ruta.destino }}</td>
+                        <td>{{ it.hora_salida|time:'H:i' }}</td>
+                        <td>{{ it.hora_llegada|time:'H:i' }}</td>
+                        <td><span class="badge-estado {% if it.tipo == 'diario' %}badge-activa{% else %}badge-cancelada{% endif %}">{{ it.get_tipo_display }}</span></td>
+                        <td>{% if it.fecha_especifica %}{{ it.fecha_especifica|date:'d/m/Y' }}{% else %}—{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-calendar-event empty-icon"></i>
+            <p>Aún no tienes itinerarios.</p>
+            <a href="{% url 'boletos:empresa_itinerario_create' %}" class="btn-accent mt-2 d-inline-block">Crear primer itinerario</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

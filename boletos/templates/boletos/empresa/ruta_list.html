@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-card">
+        <div class="page-header d-flex align-items-start justify-content-between">
+            <div>
+                <h1>Rutas</h1>
+                <p class="text-secondary">Gestiona las rutas de tu empresa.</p>
+            </div>
+            <a href="{% url 'boletos:empresa_ruta_create' %}" class="btn-accent">+ Crear Ruta</a>
+        </div>
+
+        {% if rutas %}
+        <div class="table-responsive">
+            <table class="table-reservas w-100">
+                <thead>
+                    <tr>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Duración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ruta in rutas %}
+                    <tr>
+                        <td><strong>{{ ruta.origen }}</strong></td>
+                        <td><strong>{{ ruta.destino }}</strong></td>
+                        <td>{{ ruta.duracion_minutos }} min</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-signpost-2 empty-icon"></i>
+            <p>Aún no tienes rutas registradas.</p>
+            <a href="{% url 'boletos:empresa_ruta_create' %}" class="btn-accent mt-2 d-inline-block">Crear primera ruta</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -6,7 +6,7 @@
     <div class="page-card">
         <div class="page-header">
             <h1>Mis Reservas</h1>
-            <p class="text-secondary">Tus reservas de asientos activas.</p>
+            <p class="text-secondary">Historial de todas tus reservas.</p>
         </div>
 
         {% if reservas %}
@@ -16,6 +16,8 @@
                     <tr>
                         <th>Bus</th>
                         <th>Asiento</th>
+                        <th>Ruta</th>
+                        <th>Horario</th>
                         <th>Fecha de Reserva</th>
                         <th>Estado</th>
                         <th></th>
@@ -31,12 +33,36 @@
                             <br><span class="text-secondary">{{ reserva.bus.placa }}</span>
                         </td>
                         <td class="fw-bold">{{ reserva.numero }}</td>
+                        <td>
+                            {% if reserva.itinerario %}
+                            {{ reserva.itinerario.ruta.origen.ciudad }} → {{ reserva.itinerario.ruta.destino.ciudad }}
+                            {% else %}
+                            <span class="text-secondary">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if reserva.itinerario %}
+                            {{ reserva.itinerario.hora_salida|time:'H:i' }}
+                            {% else %}
+                            <span class="text-secondary">—</span>
+                            {% endif %}
+                        </td>
                         <td>{{ reserva.fecha_reserva|date:'d/m/Y H:i' }}</td>
-                        <td><span class="badge-estado badge-activa">Activa</span></td>
+                        <td>
+                            {% if reserva.cancelado %}
+                            <span class="badge-estado badge-cancelada">Cancelada</span>
+                            {% elif reserva.esta_completada %}
+                            <span class="badge-estado badge-completada">Completada</span>
+                            {% else %}
+                            <span class="badge-estado badge-activa">Activa</span>
+                            {% endif %}
+                        </td>
                         <td class="text-end">
+                            {% if not reserva.cancelado and not reserva.esta_completada %}
                             <a href="{% url 'boletos:cancel' reserva.pk %}" class="btn-sm-accent">
                                 <i class="bi bi-x-lg me-1"></i>Cancelar
                             </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -46,7 +72,7 @@
         {% else %}
         <div class="empty-state">
             <i class="bi bi-ticket-perforated empty-icon"></i>
-            <p>No tienes reservas activas.</p>
+            <p>No tienes reservas registradas.</p>
             <a href="{% url 'boletos:bus_list' %}" class="btn-accent mt-2 d-inline-block">Ver Buses Disponibles</a>
         </div>
         {% endif %}

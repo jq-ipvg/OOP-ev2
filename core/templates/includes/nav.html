@@ -18,12 +18,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'boletos:empresa_bus_list' %}">Mis Buses</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'boletos:empresa_ruta_list' %}">Rutas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'boletos:empresa_itinerario_list' %}">Itinerarios</a>
+                    </li>
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'boletos:bus_list' %}">Buses</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'boletos:mis_reservas' %}">Mis Reservas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'boletos:mis_compras' %}">Mis Compras</a>
                     </li>
                     {% endif %}
                 {% endif %}

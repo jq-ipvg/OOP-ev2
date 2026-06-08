@@ -5,19 +5,33 @@
 <section class="page-section">
         <div class="page-card">
         <div class="mb-3">
+            {% if itinerario_obj %}
+            <a href="javascript:history.back()" class="btn-back" onclick="if (document.referrer === '') { this.href='{% url 'boletos:bus_list' %}'; }">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            {% else %}
             <a href="{% url 'boletos:bus_list' %}" class="btn-back">
                 <i class="bi bi-arrow-left"></i> Volver a buses
             </a>
+            {% endif %}
         </div>
         <div class="bus-detail-header text-center">
             <h1>{{ bus.nombre }}</h1>
+            {% if itinerario_obj %}
+            <p class="fw-semibold mb-1" style="color: var(--color-accent); font-size: 0.9375rem;">
+                <i class="bi bi-signpost-2 me-1"></i> {{ itinerario_obj.ruta.origen.ciudad }} → {{ itinerario_obj.ruta.destino.ciudad }}
+                &middot; Sale {{ itinerario_obj.hora_salida|time:'H:i' }}
+            </p>
+            {% endif %}
             <div class="bus-meta">
                 <span><i class="bi bi-upc-scan me-1"></i> {{ bus.placa }}</span>
                 <span><i class="bi bi-people me-1"></i> {{ bus.capacidad }} asientos</span>
                 <span><i class="bi bi-building me-1"></i> {{ bus.get_pisos_display }}</span>
+                {% if itinerario_obj %}
                 <span><i class="bi bi-check-circle me-1" style="color: var(--color-success);"></i>
-                    {{ bus.asientos_disponibles }} disponibles
+                    {{ disponibles_hoy|default:bus.asientos_disponibles }}
                 </span>
+                {% endif %}
             </div>
         </div>
 
@@ -41,7 +55,25 @@
                 {% endif %}
                 <div class="seat-grid">
                     {% for asiento in piso_asientos %}
-                        {% if not asiento.ocupado %}
+                        {% if itinerario_obj and itinerario_obj.ya_partio %}
+                            <div class="seat seat-occupied"
+                                 title="Este viaje ya ha finalizado">
+                                {{ asiento.numero }}
+                            </div>
+                        {% elif itinerario_obj %}
+                            {% if asiento.numero in occupied_seat_ids %}
+                                <div class="seat seat-occupied"
+                                     title="Reservado por {{ asiento.usuario.get_full_name|default:asiento.usuario.username }}{% if asiento.fecha_reserva %} el {{ asiento.fecha_reserva|date:'d/m/Y' }}{% endif %}">
+                                    {{ asiento.numero }}
+                                </div>
+                            {% else %}
+                                <div class="seat seat-available seat-selectable"
+                                     data-seat="{{ asiento.pk }}"
+                                     title="Asiento {{ asiento.numero }} — Disponible">
+                                    {{ asiento.numero }}
+                                </div>
+                            {% endif %}
+                        {% elif not asiento.ocupado %}
                             <a href="{% url 'boletos:reserve' asiento.pk %}"
                                class="seat seat-available"
                                title="Asiento {{ asiento.numero }} — Disponible">
@@ -67,13 +99,60 @@
                     <span class="swatch swatch-available"></span> Disponible
                 </div>
                 <div class="seat-legend-item">
-                    <span class="swatch swatch-occupied"></span> Ocupado
+                    <span class="swatch swatch-selected"></span> Seleccionado
                 </div>
                 <div class="seat-legend-item">
-                    <span class="swatch swatch-hover"></span> Seleccionar
+                    <span class="swatch swatch-occupied"></span> Ocupado
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+{% if itinerario_obj %}
+<div id="cart-bar" class="cart-bar" style="display: none;">
+    <div class="container d-flex align-items-center justify-content-between">
+        <span id="cart-text" class="cart-text">0 asientos seleccionados</span>
+        <a id="pay-btn" class="btn-accent" href="#">Pagar $0</a>
+    </div>
+</div>
+
+<script>
+    var selected = {};
+    {% if fecha %}var fechaParam = '&fecha={{ fecha }}';{% else %}var fechaParam = '';{% endif %}
+    var itinerarioPk = {{ itinerario_obj.pk }};
+
+    document.querySelectorAll('.seat-selectable').forEach(function(el) {
+        el.addEventListener('click', function() {
+            var pk = this.dataset.seat;
+            if (this.classList.contains('seat-selected')) {
+                this.classList.remove('seat-selected');
+                this.classList.add('seat-available');
+                delete selected[pk];
+            } else {
+                this.classList.remove('seat-available');
+                this.classList.add('seat-selected');
+                selected[pk] = parseInt(pk);
+            }
+            updateCart();
+        });
+    });
+
+    function updateCart() {
+        var ids = Object.keys(selected);
+        var count = ids.length;
+        var bar = document.getElementById('cart-bar');
+        var text = document.getElementById('cart-text');
+        var btn = document.getElementById('pay-btn');
+        if (count > 0) {
+            bar.style.display = 'flex';
+            text.textContent = count + ' asiento' + (count > 1 ? 's' : '') + ' seleccionado' + (count > 1 ? 's' : '');
+            btn.textContent = 'Pagar $' + (count * 5000);
+            btn.href = '{% url "boletos:pagar" %}?itinerario=' + itinerarioPk + fechaParam + '&asientos=' + ids.join('&asientos=');
+        } else {
+            bar.style.display = 'none';
+        }
+    }
+</script>
+{% endif %}
 {% endblock %}
